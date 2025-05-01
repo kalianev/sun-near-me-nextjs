@@ -1,0 +1,187 @@
+"use client"
+
+import { useState } from "react"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
+import { motion } from "framer-motion"
+
+import { FadeIn } from "@/components/fade-in"
+import { AnimatedBackground } from "@/components/sun-background"
+import { BlogCard } from "@/components/blog-card"
+import { blogPosts } from "@/lib/blog-data"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { AnimatedText } from "@/components/animated-text"
+
+export default function BlogPage() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  // Extract all unique categories from blog posts
+  const allCategories = Array.from(new Set(blogPosts.flatMap((post) => post.categories))).sort()
+
+  // Filter posts by selected category
+  const filteredPosts = selectedCategory
+    ? blogPosts.filter((post) => post.categories.includes(selectedCategory))
+    : blogPosts
+
+  return (
+    <main className="relative min-h-screen overflow-hidden">
+      <AnimatedBackground />
+
+      {/* Header */}
+      <header className="container flex items-center justify-between py-6">
+        <div className="flex items-center gap-2">
+          <motion.div
+            className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          />
+          <span className="text-xl font-medium tracking-tight">Sun Near Me</span>
+        </div>
+        <nav className="hidden md:flex items-center gap-8">
+          <Link href="/" className="text-sm hover:text-primary transition-colors">
+            Home
+          </Link>
+          <Link href="/blog" className="text-sm hover:text-primary transition-colors">
+            Journal
+          </Link>
+          <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
+            Playlists
+          </Link>
+          <ThemeToggle />
+        </nav>
+        <div className="flex items-center gap-4 md:hidden">
+          <ThemeToggle />
+          <motion.button className="text-foreground" whileTap={{ scale: 0.9 }}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </motion.button>
+        </div>
+      </header>
+
+      {/* Back Button */}
+      <div className="container mt-8">
+        <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground">
+          <motion.div whileHover={{ x: -3 }} whileTap={{ x: -6 }}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+          </motion.div>
+          <span>Back to home</span>
+        </Link>
+      </div>
+
+      {/* Blog Header */}
+      <section className="container mt-12">
+        <FadeIn>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            <AnimatedText text="Sun Journal" type="letter" />
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg">
+            <AnimatedText
+              text="Explore the intersection of sunlight with culture, art, architecture, and wellbeing. Our journal features insights into heliocentric traditions and contemporary practices."
+              delay={0.3}
+            />
+          </p>
+        </FadeIn>
+
+        {/* Categories */}
+        <div className="mt-8 flex flex-wrap gap-2">
+          <FadeIn delay={0.1}>
+            <motion.button
+              className={`rounded-full px-4 py-1 text-sm backdrop-blur-sm ${
+                selectedCategory === null
+                  ? "bg-primary/20 text-foreground"
+                  : "bg-card/50 text-muted-foreground hover:bg-card hover:text-foreground"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSelectedCategory(null)}
+            >
+              All
+            </motion.button>
+          </FadeIn>
+
+          {allCategories.map((category, index) => (
+            <FadeIn key={category} delay={0.15 + index * 0.05}>
+              <motion.button
+                className={`rounded-full px-4 py-1 text-sm ${
+                  selectedCategory === category
+                    ? "bg-primary/20 text-foreground"
+                    : "bg-card/50 text-muted-foreground hover:bg-card hover:text-foreground"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </motion.button>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* Blog Posts */}
+      <section className="container my-16">
+        {filteredPosts.length > 0 ? (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {filteredPosts.map((post, index) => (
+              <FadeIn key={post.slug} delay={0.1 + index * 0.05}>
+                <BlogCard post={post} />
+              </FadeIn>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="rounded-full bg-primary/20 p-4">
+              <svg className="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 className="mt-4 text-xl font-medium">No posts found</h3>
+            <p className="mt-2 text-muted-foreground">No posts were found in the {selectedCategory} category.</p>
+            <motion.button
+              className="mt-4 rounded-full bg-primary/20 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/30"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSelectedCategory(null)}
+            >
+              View all posts
+            </motion.button>
+          </div>
+        )}
+      </section>
+
+      {/* Footer */}
+      <footer className="container pb-12 pt-24">
+        <div className="flex flex-col items-center justify-between gap-6 border-t pt-8 md:flex-row">
+          <div className="flex items-center gap-2">
+            <motion.div
+              className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-accent"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+            <span className="text-sm font-medium">Sun Near Me</span>
+          </div>
+          <div className="flex gap-8 text-sm text-muted-foreground">
+            <Link href="/privacy" className="hover:text-foreground">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-foreground">
+              Terms
+            </Link>
+            <Link href="/contact" className="hover:text-foreground">
+              Contact
+            </Link>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} Sun Near Me. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </main>
+  )
+}

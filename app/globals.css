@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 100% 97%;
+    --foreground: 40 10% 10%;
+
+    --primary: 35 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 25 100% 60%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 15 100% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 40 30% 90%;
+    --muted-foreground: 40 10% 40%;
+
+    --card: 40 30% 98%;
+    --card-foreground: 40 10% 10%;
+
+    --border: 40 30% 85%;
+    --input: 40 30% 85%;
+    --ring: 35 100% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .moon-mode {
+    --background: 240 30% 5%;
+    --foreground: 240 10% 90%;
+
+    --primary: 220 100% 70%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 250 100% 70%;
+    --secondary-foreground: 0 0% 0%;
+
+    --accent: 270 100% 70%;
+    --accent-foreground: 0 0% 0%;
+
+    --muted: 240 30% 15%;
+    --muted-foreground: 240 10% 70%;
+
+    --card: 240 30% 10%;
+    --card-foreground: 240 10% 90%;
+
+    --border: 240 30% 20%;
+    --input: 240 30% 20%;
+    --ring: 220 100% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
