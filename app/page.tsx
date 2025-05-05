@@ -14,44 +14,13 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { AnimatedText } from "@/components/animated-text"
 import { HeroAnimation } from "@/components/hero-animation"
 import { DayNightAnimation } from "@/components/day-night-animation"
+import { Navigation } from "@/components/navigation"
+import Footer from '@/components/footer'
 
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       <AnimatedBackground />
-
-      {/* Header */}
-      <header className="container flex items-center justify-between py-6">
-        <div className="flex items-center gap-2">
-          <motion.div
-            className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-          />
-          <span className="text-xl font-medium tracking-tight">Sun Near Me</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-sm hover:text-primary transition-colors">
-            Home
-          </Link>
-          <Link href="/blog" className="text-sm hover:text-primary transition-colors">
-            Journal
-          </Link>
-          <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
-            Playlists
-          </Link>
-          <ThemeToggle />
-        </nav>
-        <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggle />
-          <Button variant="ghost" size="icon">
-            <span className="sr-only">Menu</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </Button>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="container mt-12 md:mt-24 relative">
@@ -196,9 +165,9 @@ export default function Home() {
               <div className="mb-4 h-12 w-12 rounded-full bg-accent/20 flex items-center justify-center">
                 <div className="h-6 w-6 rounded-full bg-accent" />
               </div>
-              <h3 className="text-xl font-medium">All-in-One Experience</h3>
+              <h3 className="text-xl font-medium">Smart Trip Planning</h3>
               <p className="mt-2 text-muted-foreground">
-                Stop switching between weather and maps apps. Do it all in one with hyper-tweakable parameters.
+                Plan quick adventures or longer journeys with sun-optimized itineraries and recommendations.
               </p>
             </motion.div>
           </FadeIn>
@@ -338,33 +307,7 @@ export default function Home() {
         </FadeIn>
       </section>
 
-      {/* Footer */}
-      <footer className="container pb-12 pt-24">
-        <div className="flex flex-col items-center justify-between gap-6 border-t pt-8 md:flex-row">
-          <div className="flex items-center gap-2">
-            <motion.div
-              className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-accent"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            />
-            <span className="text-sm font-medium">Sun Near Me</span>
-          </div>
-          <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-foreground">
-              Terms
-            </Link>
-            <Link href="/contact" className="hover:text-foreground">
-              Contact
-            </Link>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Sun Near Me. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }

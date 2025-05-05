@@ -1,0 +1,277 @@
+[
+    {
+      "category": "Food & Drink",
+      "name": "Restaurants",
+      "queries": ["restaurant", "restaurants near me", "fine dining restaurant", "casual dining", "fast food restaurant", "buffet restaurant", "food truck"]
+    },
+    {
+      "category": "Food & Drink",
+      "name": "Cafés & Coffee",
+      "queries": ["cafe", "coffee shop", "coffeehouse", "espresso bar", "tea house", "tearoom"]
+    },
+    {
+      "category": "Food & Drink",
+      "name": "Bars & Nightlife",
+      "queries": ["bar", "pub", "cocktail bar", "wine bar", "brewhouse", "brewery taproom", "distillery", "nightclub"]
+    },
+    {
+      "category": "Food & Drink",
+      "name": "Bakeries & Sweets",
+      "queries": ["bakery", "bread bakery", "donut shop", "pastry shop", "dessert shop", "ice cream shop", "gelato", "cupcake shop"]
+    },
+    {
+      "category": "Food & Drink",
+      "name": "Specialty Food Retail",
+      "queries": ["grocery store", "supermarket", "convenience store", "health food store", "butcher shop", "meat market", "fish market", "cheese shop", "deli", "chocolate shop", "spice shop", "liquor store", "wine shop", "farmer's market"]
+    },
+    {
+      "category": "Retail",
+      "name": "Books & Media",
+      "queries": ["bookstore", "comic book store", "record store", "vinyl shop", "video game store", "music store"]
+    },
+    {
+      "category": "Retail",
+      "name": "Gifts & Stationery",
+      "queries": ["gift shop", "greeting card shop", "souvenir shop", "stationery store", "art print shop"]
+    },
+    {
+      "category": "Retail",
+      "name": "Clothing & Accessories",
+      "queries": ["clothing store", "boutique", "shoe store", "vintage clothing", "consignment shop", "thrift store", "jewelry store", "accessories store", "hat shop"]
+    },
+    {
+      "category": "Retail",
+      "name": "Home & Garden",
+      "queries": ["furniture store", "home goods store", "home decor", "kitchen supply", "hardware store", "garden center", "plant nursery", "lighting store", "mattress store"]
+    },
+    {
+      "category": "Retail",
+      "name": "Electronics & Tech",
+      "queries": ["electronics store", "computer store", "cell phone store", "mobile phone repair", "camera store", "audio equipment store", "musical instrument store", "guitar shop"]
+    },
+    {
+      "category": "Retail",
+      "name": "Sports & Outdoor",
+      "queries": ["sporting goods store", "outdoor gear", "bike shop", "skate shop", "surf shop", "ski shop", "camping store", "fishing tackle shop"]
+    },
+    {
+      "category": "Retail",
+      "name": "Toys, Hobby & Craft",
+      "queries": ["toy store", "hobby shop", "model shop", "art supply store", "craft store", "fabric store", "yarn shop", "sewing store"]
+    },
+    {
+      "category": "Retail",
+      "name": "Health & Beauty Retail",
+      "queries": ["pharmacy", "drugstore", "beauty supply", "cosmetics store", "supplement store", "vitamin shop", "CBD store"]
+    },
+    {
+      "category": "Retail",
+      "name": "Pets Retail",
+      "queries": ["pet store", "aquarium store", "feed store", "pet supply", "fish store", "reptile store"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Care & Beauty Services",
+      "queries": ["hair salon", "barber shop", "nail salon", "day spa", "massage therapist", "tattoo shop", "piercing studio", "esthetician"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Cleaning & Repair",
+      "queries": ["dry cleaner", "laundromat", "tailor", "alterations", "shoe repair", "locksmith", "appliance repair", "phone repair", "watch repair"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Auto Services",
+      "queries": ["gas station", "car wash", "auto repair", "mechanic", "auto body shop", "tire shop", "oil change", "car dealership", "auto parts store"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Professional & Financial Services",
+      "queries": ["bank", "credit union", "insurance agency", "financial advisor", "accountant", "tax preparer", "law firm", "real estate agency", "notary public"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Printing, Copy & Shipping",
+      "queries": ["post office", "shipping store", "mailbox center", "print shop", "copy center", "sign shop", "banner printing"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Creative & Tech Services",
+      "queries": ["marketing agency", "design studio", "graphic design", "web design", "software company", "recording studio", "photo studio"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Education & Training",
+      "queries": ["dance studio", "music school", "martial arts school", "tutoring center", "driving school", "language school", "coding bootcamp"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Pet Care Services",
+      "queries": ["veterinarian", "animal hospital", "pet groomer", "dog daycare", "pet boarding", "dog trainer", "pet sitter"]
+    },
+    {
+      "category": "Personal & Household Services",
+      "name": "Events & Planning",
+      "queries": ["event venue", "wedding venue", "banquet hall", "party supply rental", "event planner", "florist", "caterer", "party equipment rental"]
+    },
+    {
+      "category": "Health & Wellness",
+      "name": "Medical Facilities",
+      "queries": ["hospital", "medical clinic", "urgent care", "doctor", "family practice", "dental clinic", "dentist", "orthodontist", "optometrist", "physical therapy", "chiropractor", "mental health clinic", "psychiatrist"]
+    },
+    {
+      "category": "Health & Wellness",
+      "name": "Fitness Centers",
+      "queries": ["gym", "fitness center", "yoga studio", "pilates studio", "crossfit gym", "spin studio", "dance fitness", "boxing gym"]
+    },
+    {
+      "category": "Health & Wellness",
+      "name": "Alternative & Holistic",
+      "queries": ["acupuncture clinic", "herbal medicine", "naturopath", "nutritionist", "meditation center", "wellness center", "reiki"]
+    },
+    {
+      "category": "Arts, Culture & Entertainment",
+      "name": "Museums & Galleries",
+      "queries": ["art gallery", "museum", "art museum", "science museum", "children's museum", "history museum"]
+    },
+    {
+      "category": "Arts, Culture & Entertainment",
+      "name": "Performing Arts Venues",
+      "queries": ["theater", "performing arts theater", "concert hall", "live music venue", "opera house", "comedy club", "jazz club"]
+    },
+    {
+      "category": "Arts, Culture & Entertainment",
+      "name": "Cinema & Gaming",
+      "queries": ["movie theater", "cinema", "drive-in theater", "arcade", "vr arcade", "escape room", "bowling alley", "trampoline park", "amusement park"]
+    },
+    {
+      "category": "Arts, Culture & Entertainment",
+      "name": "Libraries & Community Centers",
+      "queries": ["public library", "library", "community center", "cultural center", "senior center", "youth center"]
+    },
+    {
+      "category": "Accommodation & Travel",
+      "name": "Lodging",
+      "queries": ["hotel", "motel", "hostel", "bed and breakfast", "bnb", "vacation rental", "resort"]
+    },
+    {
+      "category": "Accommodation & Travel",
+      "name": "Travel Services",
+      "queries": ["travel agency", "tour operator", "tourist information", "car rental", "bike rental", "kayak rental", "rv rental", "airport shuttle"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Parks & Gardens",
+      "queries": ["park", "city park", "state park", "dog park", "botanical garden", "arboretum", "nature reserve", "community garden"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Recreation Sites",
+      "queries": ["campground", "hiking trail", "trailhead", "beach access", "marina", "boat launch", "ski resort", "snow park"]
+    },
+    {
+      "category": "Industrial & Logistics Retail",
+      "name": "Building Materials & Supplies",
+      "queries": ["building materials store", "lumber yard", "hardware wholesaler", "construction supply"]
+    },
+    {
+      "category": "Industrial & Logistics Retail",
+      "name": "Construction Equipment",
+      "queries": ["equipment rental", "construction equipment supplier", "tool rental", "heavy equipment dealer"]
+    },
+    {
+      "category": "Industrial & Logistics Retail",
+      "name": "Warehouse & Wholesale Clubs",
+      "queries": ["warehouse club", "membership warehouse", "bulk store", "wholesale store"]
+    },
+    {
+      "category": "Industrial & Logistics Retail",
+      "name": "Distribution & Logistics",
+      "queries": ["distribution center", "fulfillment center", "logistics hub", "shipping warehouse"]
+    },
+    {
+      "category": "Government & Institutions",
+      "name": "Government Buildings",
+      "queries": ["city hall", "courthouse", "dmv", "police station", "fire station", "post office"]
+    },
+    {
+      "category": "Religious & Spiritual",
+      "name": "Places of Worship",
+      "queries": ["church", "cathedral", "mosque", "synagogue", "temple", "meditation temple", "ashram"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Beaches & Waterfronts",
+      "queries": ["beach", "lake beach", "river beach", "swimming beach", "public beach access", "coastal beach", "waterfront park", "boardwalk"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "National Parks",
+      "queries": ["national park", "national park visitor center", "national park near me", "national park trailhead", "national park campground"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "National Monuments & Historic Sites",
+      "queries": ["national monument", "historic site", "historic landmark", "heritage site", "national historic park"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Scenic Lookouts & Viewpoints",
+      "queries": ["scenic lookout", "viewpoint", "vista point", "overlook", "scenic overlook", "observation deck", "panoramic view"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Lakes & Reservoirs",
+      "queries": ["lake", "reservoir", "mountain lake", "swimming lake", "lake access", "boat launch", "kayak lake", "lakefront park"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Rivers & Streams",
+      "queries": ["river", "river access", "riverfront park", "scenic river", "kayak launch", "rafting river", "creek trail"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Waterfalls",
+      "queries": ["waterfall", "falls", "scenic waterfall", "waterfall hike", "waterfall trail", "waterfall viewpoint"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Hot Springs",
+      "queries": ["hot spring", "thermal spring", "geothermal pool", "natural hot spring", "hot spring resort"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Wetlands & Wildlife Refuges",
+      "queries": ["wetland", "marsh", "wildlife refuge", "bird sanctuary", "nature preserve", "swamp trail"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Canyons & Gorges",
+      "queries": ["canyon", "gorge", "slot canyon", "scenic canyon", "canyon trailhead", "canyon overlook"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Deserts & Sand Dunes",
+      "queries": ["desert", "sand dunes", "desert park", "national desert", "desert wilderness", "sand dune trail"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Mountains & Peaks",
+      "queries": ["mountain", "mountain peak", "summit", "mountain viewpoint", "alpine trail", "mountain hike"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Forests & Wilderness Areas",
+      "queries": ["national forest", "state forest", "old‑growth forest", "wilderness area", "forest trail", "scenic forest drive"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Springs & Swimming Holes",
+      "queries": ["spring", "natural spring", "swimming hole", "blue hole", "cold spring", "spring-fed pool"]
+    },
+    {
+      "category": "Outdoor & Nature Destinations",
+      "name": "Caves & Caverns",
+      "queries": ["cave", "cavern", "lava tube", "show cave", "scenic cave", "cave tour"]
+    }
+  ]

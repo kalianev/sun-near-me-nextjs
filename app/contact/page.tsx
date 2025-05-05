@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import Footer from '@/components/footer'
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -77,6 +78,9 @@ export default function ContactPage() {
           </Link>
           <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
             Playlists
+          </Link>
+          <Link href="/trips" className="text-sm hover:text-primary transition-colors">
+            Trip Planner
           </Link>
           <ThemeToggle />
         </nav>
@@ -302,33 +306,15 @@ export default function ContactPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="container pb-12 pt-24">
-        <div className="flex flex-col items-center justify-between gap-6 border-t pt-8 md:flex-row">
-          <div className="flex items-center gap-2">
-            <motion.div
-              className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-accent"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            />
-            <span className="text-sm font-medium">Sun Near Me</span>
+      <div className="container my-24">
+        <FadeIn>
+          <div className="mx-auto max-w-2xl">
+            {/* ... existing code ... */}
           </div>
-          <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-foreground">
-              Terms
-            </Link>
-            <Link href="/contact" className="text-primary hover:text-primary/80">
-              Contact
-            </Link>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Sun Near Me. All rights reserved.
-          </div>
-        </div>
-      </footer>
+        </FadeIn>
+      </div>
+
+      <Footer />
     </main>
   )
 }

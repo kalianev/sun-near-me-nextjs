@@ -11,6 +11,7 @@ import { AnimatedBackground } from "@/components/sun-background"
 import { blogPosts } from "@/lib/blog-data"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AnimatedText } from "@/components/animated-text"
+import Footer from '@/components/footer'
 
 export default function BlogPost() {
   const { slug } = useParams() as { slug: string }
@@ -47,6 +48,9 @@ export default function BlogPost() {
           </Link>
           <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
             Playlists
+          </Link>
+          <Link href="/trips" className="text-sm hover:text-primary transition-colors">
+            Trip Planner
           </Link>
           <ThemeToggle />
         </nav>
@@ -170,33 +174,7 @@ export default function BlogPost() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="container pb-12 pt-24">
-        <div className="flex flex-col items-center justify-between gap-6 border-t pt-8 md:flex-row">
-          <div className="flex items-center gap-2">
-            <motion.div
-              className="h-6 w-6 rounded-full bg-gradient-to-br from-primary to-accent"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-            />
-            <span className="text-sm font-medium">Sun Near Me</span>
-          </div>
-          <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground">
-              Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-foreground">
-              Terms
-            </Link>
-            <Link href="/contact" className="hover:text-foreground">
-              Contact
-            </Link>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Sun Near Me. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }
