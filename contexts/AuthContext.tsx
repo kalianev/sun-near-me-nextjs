@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 
 interface AuthContextType {
   user: User | null
@@ -21,8 +21,15 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [supabaseError, setSupabaseError] = useState<string | null>(null)
 
   useEffect(() => {
+    const supabase = getSupabase()
+    if (!supabase) {
+      setSupabaseError('Authentication service is not available. Please try again later or contact support.')
+      setLoading(false)
+      return
+    }
     // Check active sessions and sets the user
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
@@ -39,6 +46,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signInWithGoogle = async () => {
+    const supabase = getSupabase()
+    if (!supabase) {
+      setSupabaseError('Authentication service is not available. Please try again later or contact support.')
+      return
+    }
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -53,12 +65,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    const supabase = getSupabase()
+    if (!supabase) {
+      setSupabaseError('Authentication service is not available. Please try again later or contact support.')
+      return
+    }
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
     } catch (error) {
       console.error('Error signing out:', error)
     }
+  }
+
+  if (supabaseError) {
+    return <div style={{ color: 'red', padding: 24, textAlign: 'center' }}>{supabaseError}</div>
   }
 
   return (
