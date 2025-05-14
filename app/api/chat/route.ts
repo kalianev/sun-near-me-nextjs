@@ -17,11 +17,6 @@ if (!apiKey) {
   throw new Error('Missing OpenAI API Key');
 }
 
-if (apiKey === 'your_api_key') {
-  console.error('API Key is still set to placeholder value');
-  throw new Error('Please set your actual OpenAI API Key in .env.local');
-}
-
 // Since we've validated the API key, we can safely assert it's a string
 const validatedApiKey = apiKey as string;
 

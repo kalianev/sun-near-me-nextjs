@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
@@ -42,7 +42,7 @@ const questions = [
   },
 ]
 
-export default function PlaylistSurvey() {
+function SurveyContent() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [isComplete, setIsComplete] = useState(false)
@@ -252,5 +252,13 @@ export default function PlaylistSurvey() {
 
       <Footer />
     </main>
+  )
+}
+
+export default function PlaylistSurvey() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SurveyContent />
+    </Suspense>
   )
 } 
