@@ -17,7 +17,7 @@ import Footer from '@/components/footer'
 const questions = [
   {
     id: "timeOfDay",
-    question: "What time of day is it?",
+    question: "What time of day is it??",
     options: ["Sunrise", "Morning", "Afternoon", "Sunset", "Night"],
   },
   {
