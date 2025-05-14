@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Plus, MoveHorizontal, Sun, MapPin, Calendar } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useLocationStore } from '../../store/locationStore';
-import ComparisonCard from '../../components/comparison/ComparisonCard';
-import CityComparisonCard from '../../components/comparison/CityComparisonCard';
-import AddLocationDialog from '../../components/comparison/AddLocationDialog';
-import { mockLocations, mockCities } from '../../utils/mockData';
+import { useLocationStore } from '@/store/locationStore';
+import ComparisonCard from '@/components/comparison/ComparisonCard';
+import CityComparisonCard from '@/components/comparison/CityComparisonCard';
+import AddLocationDialog from '@/components/comparison/AddLocationDialog';
+import { mockCities } from '@/utils/mockData';
 import Footer from '@/components/footer';
 import { FadeIn } from "@/components/fade-in";
 import { AnimatedBackground } from "@/components/sun-background";
@@ -17,18 +17,18 @@ import Link from 'next/link';
 
 const ComparePage = () => {
   const router = useRouter();
-  const { comparisonList, removeFromComparison, clearComparison, addToComparison } = useLocationStore();
+  const { locations, comparisonList, removeFromComparison, clearComparison, addToComparison } = useLocationStore();
   const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
   
   // Add sample locations if comparison is empty
   useEffect(() => {
-    if (comparisonList.length === 0) {
-      // Add first 2 mock locations to comparison
-      mockLocations.slice(0, 2).forEach(location => {
+    if (comparisonList.length === 0 && locations.length >= 2) {
+      // Add first 2 locations to comparison
+      locations.slice(0, 2).forEach(location => {
         addToComparison(location);
       });
     }
-  }, [comparisonList.length, addToComparison]);
+  }, [comparisonList.length, locations, addToComparison]);
   
   // Find highest sun score among cities
   const highestScoreCity = mockCities.reduce((prev, current) => 
@@ -148,7 +148,7 @@ const ComparePage = () => {
                   >
                     <h3 className="font-medium mb-2">Best Time to Visit</h3>
                     <p className="text-sm text-muted-foreground">
-                      {comparisonList[0].name} gets the most sunlight between 10:00 AM and 2:00 PM, while {comparisonList[1].name} is best from 11:00 AM to 4:00 PM due to its eastern exposure.
+                      {comparisonList[0].name} gets the most sunlight between {comparisonList[0].weatherInfo?.sunriseTime} and {comparisonList[0].weatherInfo?.sunsetTime}, while {comparisonList[1].name} is best from {comparisonList[1].weatherInfo?.sunriseTime} to {comparisonList[1].weatherInfo?.sunsetTime}.
                     </p>
                   </motion.div>
                   
@@ -176,40 +176,10 @@ const ComparePage = () => {
                   </motion.div>
                 </div>
                 
-                <div className="mb-4">
-                  <h3 className="font-medium mb-3">Weather Conditions</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-border">
-                          <th className="text-left py-2 px-4">Location</th>
-                          <th className="text-left py-2 px-4">Temperature</th>
-                          <th className="text-left py-2 px-4">Conditions</th>
-                          <th className="text-left py-2 px-4">UV Index</th>
-                          <th className="text-left py-2 px-4">Sunrise / Sunset</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {comparisonList.map(location => (
-                          <tr key={location.id} className="border-b border-border">
-                            <td className="py-2 px-4">{location.name}</td>
-                            <td className="py-2 px-4">{location.weatherInfo?.temperature}°F</td>
-                            <td className="py-2 px-4">{location.weatherInfo?.condition}</td>
-                            <td className="py-2 px-4">{location.weatherInfo?.uvIndex}/10</td>
-                            <td className="py-2 px-4">{location.weatherInfo?.sunriseTime} / {location.weatherInfo?.sunsetTime}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                
                 <div>
                   <h3 className="font-medium mb-3">Recommendations</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Based on your comparison, we recommend {
-                      bestLocation?.name
-                    } for the best sun experience today. It has the highest sun score and optimal conditions.
+                    Based on your comparison, we recommend {bestLocation?.name} for the best sun experience today. It has the highest sun score and optimal conditions.
                   </p>
                   <motion.button 
                     onClick={handleViewDirections}
@@ -258,7 +228,7 @@ const ComparePage = () => {
             >
               <h3 className="text-xl font-medium mb-4">City Comparison Insights</h3>
               <p className="text-muted-foreground mb-6">
-                Boston has the highest sun score today at {highestScoreCity.sunScore}, with {highestScoreCity.weatherInfo.sunlightHours} hours of direct sunlight. It's 2-5 degrees warmer than the other cities and has the best UV index for outdoor activities.
+                {highestScoreCity.name} has the highest sun score today at {highestScoreCity.sunScore}, with {highestScoreCity.weatherInfo.sunlightHours} hours of direct sunlight. It's 2-5 degrees warmer than the other cities and has the best UV index for outdoor activities.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

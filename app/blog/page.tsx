@@ -43,11 +43,11 @@ export default function BlogPage() {
       <section className="container mt-12">
         <FadeIn>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            <AnimatedText text="Sun Journal" type="letter" />
+            <AnimatedText text="Solore" type="letter" />
           </h1>
           <p className="mt-6 max-w-2xl text-lg">
             <AnimatedText
-              text="Explore the intersection of sunlight with culture, art, architecture, and wellbeing. Our journal features insights into heliocentric traditions and contemporary practices."
+              text="Solore—where Solar meets Lore—is our collection of sun-soaked stories and solar wisdom. Where sunlight ignites culture, illuminating places, people, and presence through our helio-journal of sound, sight, and feeling. These stories orbit the sun, and we're here to share them with you."
               delay={0.3}
             />
           </p>

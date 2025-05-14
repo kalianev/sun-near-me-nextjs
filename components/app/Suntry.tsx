@@ -24,7 +24,43 @@ interface SuntryData {
   photoUrl?: string;
   songUrl?: string;
   poeticPrompt?: string;
+  funFact?: string;
 }
+
+const SUN_FUN_FACTS = [
+  {
+    category: "Moonlight",
+    facts: [
+      "月光 (Gekkō) - In Japanese culture, moonlight filtered through leaves creates 'komorebi' - a word that captures the beauty of light dancing through trees.",
+      "The term 'moonlight' comes from the Old English 'mona' and 'leoht', meaning 'moon' and 'light' respectively.",
+      "Moonlight is actually reflected sunlight - it takes about 1.3 seconds for sunlight to reach the moon and reflect back to Earth."
+    ]
+  },
+  {
+    category: "Tidal",
+    facts: [
+      "The moon's gravitational pull creates two high tides and two low tides each day, a cycle known as the 'lunar day'.",
+      "During a full moon, the sun and moon align, creating higher than normal tides called 'spring tides'.",
+      "The word 'tide' comes from the Old English 'tid', meaning 'time' or 'season'."
+    ]
+  },
+  {
+    category: "Eclipses",
+    facts: [
+      "A total solar eclipse can only occur during a new moon, when the moon passes between Earth and the sun.",
+      "The next total solar eclipse visible from North America will occur on April 8, 2024.",
+      "Ancient cultures often viewed eclipses as omens or messages from the gods."
+    ]
+  },
+  {
+    category: "Moon Phases",
+    facts: [
+      "The moon's distance from Earth varies between 225,623 miles (perigee) and 252,088 miles (apogee).",
+      "The term 'blue moon' originally referred to the third full moon in a season with four full moons.",
+      "The word 'month' comes from 'moon' - it originally meant the time between one new moon and the next."
+    ]
+  }
+];
 
 const SAMPLE_SUNTRY: SuntryData = {
   id: '1',
@@ -40,8 +76,9 @@ const SAMPLE_SUNTRY: SuntryData = {
   mood: 'Hopeful',
   notes: "There's a crack between the buildings where the sun slips through and pools onto my notebook. I swear I can feel my bones waking up.",
   photoUrl: '/sample-suntry.jpg',
-  songUrl: 'https://open.spotify.com/track/example',
-  poeticPrompt: "If today's sun were a sound, what would it be?"
+  songUrl: 'https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT',
+  poeticPrompt: "If today's sun were a sound, what would it be?",
+  funFact: "月光 (Gekkō) - In Japanese culture, moonlight filtered through leaves creates 'komorebi' - a word that captures the beauty of light dancing through trees."
 };
 
 const COMMUNITY_SUNTRIES: SuntryData[] = [
@@ -59,7 +96,7 @@ const COMMUNITY_SUNTRIES: SuntryData[] = [
     mood: 'Calm',
     notes: "The sun is painting the water gold, and every wave catches fire for a moment before returning to the sea. It's like watching the ocean breathe light.",
     photoUrl: '/beach-sunset.jpg',
-    songUrl: 'https://open.spotify.com/track/beach-vibes'
+    songUrl: 'https://open.spotify.com/track/0V3wPSX9ygBnCm8psDIegu'
   },
   {
     id: '3',
@@ -75,7 +112,7 @@ const COMMUNITY_SUNTRIES: SuntryData[] = [
     mood: 'Energized',
     notes: "First light through the café windows, turning my coffee steam into little golden galaxies. The whole day feels full of possibility.",
     photoUrl: '/coffee-sunrise.jpg',
-    songUrl: 'https://open.spotify.com/track/morning-jazz'
+    songUrl: 'https://open.spotify.com/track/5QO79kh1waicV47BqGRL3g'
   }
 ];
 
@@ -101,6 +138,12 @@ function SuntryCard({ suntry }: { suntry: SuntryData }) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <p className="text-foreground italic mb-4">"{suntry.notes}"</p>
+          {suntry.funFact && (
+            <div className="bg-primary/5 border border-primary/20 rounded-[var(--radius)] p-4 mb-4">
+              <h3 className="text-sm font-medium text-primary mb-2">Daily Sun Wisdom</h3>
+              <p className="text-sm text-muted-foreground">{suntry.funFact}</p>
+            </div>
+          )}
           <div className="bg-muted/30 rounded-[var(--radius)] p-4">
             <h3 className="text-sm font-body text-muted-foreground mb-2">Weather Snapshot</h3>
             <div className="grid grid-cols-2 gap-2 text-sm">
@@ -111,11 +154,24 @@ function SuntryCard({ suntry }: { suntry: SuntryData }) {
             </div>
           </div>
           {suntry.songUrl && (
-            <div className="mt-4 flex items-center gap-2 text-sm text-primary">
-              <span>🎵</span>
-              <a href={suntry.songUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                Listen to the moment
-              </a>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2 text-sm text-primary">
+                <span>🎵</span>
+                <a href={suntry.songUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                  Listen to the moment
+                </a>
+              </div>
+              <div className="w-full">
+                <iframe
+                  src={suntry.songUrl.replace('open.spotify.com', 'open.spotify.com/embed')}
+                  width="100%"
+                  height="80"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  className="rounded-[var(--radius)]"
+                ></iframe>
+              </div>
             </div>
           )}
         </div>
@@ -137,6 +193,7 @@ export default function Suntry() {
   const [showPoetPrompt, setShowPoetPrompt] = useState(false);
   const [mySuntries, setMySuntries] = useState<SuntryData[]>([SAMPLE_SUNTRY]);
   const [activeTab, setActiveTab] = useState<'my' | 'community'>('my');
+  const [showFunFact, setShowFunFact] = useState(false);
 
   const moodOptions = [
     { emoji: '✨', label: 'Energized' },
@@ -171,11 +228,18 @@ export default function Suntry() {
       notes: suntry.notes || '',
       songUrl: suntry.songUrl,
       photoUrl: suntry.photoUrl,
+      funFact: suntry.funFact,
     };
 
     setMySuntries([newSuntry, ...mySuntries]);
     setIsCreating(false);
     setSuntry({ dateTime: new Date() });
+  };
+
+  const getRandomFunFact = () => {
+    const category = SUN_FUN_FACTS[Math.floor(Math.random() * SUN_FUN_FACTS.length)];
+    const fact = category.facts[Math.floor(Math.random() * category.facts.length)];
+    setSuntry({ ...suntry, funFact: fact });
   };
 
   return (
@@ -277,6 +341,30 @@ export default function Suntry() {
                   value={suntry.notes || ''}
                   onChange={(e) => setSuntry({ ...suntry, notes: e.target.value })}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-sm font-body text-muted-foreground">
+                    Add a Sun Fun Fact
+                  </label>
+                  <button
+                    onClick={() => {
+                      setShowFunFact(!showFunFact);
+                      if (!showFunFact) {
+                        getRandomFunFact();
+                      }
+                    }}
+                    className="text-sm text-primary hover:text-primary/80 transition-colors"
+                  >
+                    ✨ Get a random fact
+                  </button>
+                </div>
+                {showFunFact && (
+                  <div className="text-sm italic text-muted-foreground bg-primary/5 border border-primary/20 p-3 rounded-[var(--radius)]">
+                    {suntry.funFact || "Click 'Get a random fact' to add some solar wisdom to your Suntry"}
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

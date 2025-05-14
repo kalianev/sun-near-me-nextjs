@@ -1,11 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft, MapPin, Sun, MessageSquare, Send, Filter, ChevronDown } from "lucide-react"
 import { motion } from "framer-motion"
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
+import { useUserLocation } from '@/lib/hooks/useUserLocation';
+import { getTopSunspots, SunspotResult } from '@/lib/utils';
 
 import { FadeIn } from "@/components/fade-in"
 import { AnimatedBackground } from "@/components/sun-background"
@@ -24,6 +26,7 @@ import { locations } from "@/lib/trip-data"
 import Footer from '@/components/footer'
 import LocationCard from '@/components/LocationCard'
 import LocationList from '@/components/LocationList'
+import { useLocationStore } from '@/store/locationStore'
 
 // Google Maps API key should be in environment variables
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
@@ -35,8 +38,8 @@ const mapContainerStyle = {
 }
 
 const center = {
-  lat: 37.7749,
-  lng: -122.4194
+  lat: 47.6062,
+  lng: -122.3321
 }
 
 interface Sunspot {
@@ -57,107 +60,159 @@ interface Sunspot {
 const sunspots: Sunspot[] = [
   {
     id: "1",
-    name: "Rooftop Garden",
-    description: "Beautiful rooftop space with panoramic city views",
+    name: "Kerry Park",
+    description: "Iconic viewpoint with panoramic views of Seattle skyline and Mount Rainier",
     type: "outdoor",
     coordinates: {
-      lat: 37.7749,
-      lng: -122.4194
+      lat: 47.6305,
+      lng: -122.3584
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 92,
-    tags: ["rooftop", "south-facing", "outdoor seating"]
+    tags: ["viewpoint", "sunset", "photography"]
   },
   {
     id: "2",
-    name: "Sunny Cafe",
-    description: "Cozy cafe with large windows and outdoor patio",
-    type: "indoor",
+    name: "Gas Works Park",
+    description: "Historic industrial site turned park with stunning Lake Union views",
+    type: "outdoor",
     coordinates: {
-      lat: 37.7849,
-      lng: -122.4294
+      lat: 47.6457,
+      lng: -122.3340
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 88,
-    tags: ["indoor seating", "large windows", "patio"]
+    tags: ["waterfront", "picnic", "sunset"]
   },
   {
     id: "3",
-    name: "Beachfront Deck",
-    description: "Stunning ocean views with comfortable seating",
+    name: "Alki Beach",
+    description: "Popular beach with stunning views of downtown Seattle",
     type: "outdoor",
     coordinates: {
-      lat: 37.7949,
-      lng: -122.4394
+      lat: 47.5762,
+      lng: -122.4096
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 95,
-    tags: ["beachfront", "sunset views", "outdoor seating"]
+    tags: ["beach", "waterfront", "sunset"]
   },
   {
     id: "4",
-    name: "Glass House",
-    description: "Modern space with floor-to-ceiling windows",
+    name: "Volunteer Park Conservatory",
+    description: "Historic glass conservatory with tropical plants and natural light",
     type: "indoor",
     coordinates: {
-      lat: 37.7649,
-      lng: -122.4094
+      lat: 47.6301,
+      lng: -122.3157
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 90,
-    tags: ["modern", "large windows", "indoor seating"]
+    tags: ["conservatory", "plants", "indoor"]
   },
   {
     id: "5",
-    name: "Mountain View Terrace",
-    description: "Elevated terrace with mountain and city views",
+    name: "Discovery Park",
+    description: "Seattle's largest park with stunning views of Puget Sound",
     type: "outdoor",
     coordinates: {
-      lat: 37.7549,
-      lng: -122.4294
+      lat: 47.6621,
+      lng: -122.4271
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 93,
-    tags: ["terrace", "mountain views", "outdoor seating"]
+    tags: ["beach", "hiking", "sunset"]
   },
   {
     id: "6",
-    name: "Sun Room",
-    description: "Dedicated sun room with comfortable loungers",
+    name: "Seattle Public Library",
+    description: "Modern library with floor-to-ceiling windows and reading spaces",
     type: "indoor",
     coordinates: {
-      lat: 37.7749,
-      lng: -122.4494
+      lat: 47.6085,
+      lng: -122.3321
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 89,
-    tags: ["sun room", "indoor seating", "relaxation"]
+    tags: ["library", "reading", "indoor"]
   },
   {
     id: "7",
-    name: "Park Pavilion",
-    description: "Open-air pavilion in a scenic park setting",
+    name: "Golden Gardens Park",
+    description: "Beautiful beach park with sunset views over Puget Sound",
     type: "outdoor",
     coordinates: {
-      lat: 37.7849,
-      lng: -122.4594
+      lat: 47.6897,
+      lng: -122.4026
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
-    sunScore: 91,
-    tags: ["pavilion", "park", "outdoor seating"]
+    sunScore: 94,
+    tags: ["beach", "sunset", "picnic"]
   },
   {
     id: "8",
-    name: "Conservatory",
-    description: "Historic glass conservatory with tropical plants",
+    name: "Space Needle Observation Deck",
+    description: "Iconic observation deck with 360-degree views of Seattle",
     type: "indoor",
     coordinates: {
-      lat: 37.7949,
-      lng: -122.4694
+      lat: 47.6205,
+      lng: -122.3493
+    },
+    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
+    sunScore: 91,
+    tags: ["observation", "views", "indoor"]
+  },
+  {
+    id: "9",
+    name: "Carkeek Park",
+    description: "Scenic park with beach access and mountain views",
+    type: "outdoor",
+    coordinates: {
+      lat: 47.7107,
+      lng: -122.3768
     },
     image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
     sunScore: 87,
-    tags: ["conservatory", "plants", "indoor seating"]
+    tags: ["beach", "hiking", "sunset"]
+  },
+  {
+    id: "10",
+    name: "Olympic Sculpture Park",
+    description: "Outdoor art museum with waterfront views",
+    type: "outdoor",
+    coordinates: {
+      lat: 47.6164,
+      lng: -122.3555
+    },
+    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
+    sunScore: 86,
+    tags: ["art", "waterfront", "sculpture"]
+  },
+  {
+    id: "11",
+    name: "Seattle Aquarium",
+    description: "Waterfront aquarium with large viewing windows",
+    type: "indoor",
+    coordinates: {
+      lat: 47.6079,
+      lng: -122.3422
+    },
+    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
+    sunScore: 85,
+    tags: ["aquarium", "indoor", "family"]
+  },
+  {
+    id: "12",
+    name: "Myrtle Edwards Park",
+    description: "Scenic waterfront park with walking trails",
+    type: "outdoor",
+    coordinates: {
+      lat: 47.6189,
+      lng: -122.3555
+    },
+    image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?q=80&w=1000",
+    sunScore: 89,
+    tags: ["waterfront", "walking", "sunset"]
   }
 ]
 
@@ -167,6 +222,9 @@ export default function ExplorePage() {
   const [chatInput, setChatInput] = useState("")
   const { messages, addMessage } = useChatStore()
   const [showPrompts, setShowPrompts] = useState(true)
+  const { requestLocation, isLoading: isLocationLoading, error: locationError } = useUserLocation()
+  const { userLocation } = useLocationStore()
+  const [nearestSpots, setNearestSpots] = useState<SunspotResult[]>([])
 
   const handleSendMessage = () => {
     if (!chatInput.trim()) return
@@ -189,6 +247,14 @@ export default function ExplorePage() {
     if (sortBy === "sunScore") return b.sunScore - a.sunScore
     return 0
   })
+
+  // Get nearest spots when user location is available
+  useEffect(() => {
+    if (userLocation) {
+      const spots = getTopSunspots(userLocation.lat, userLocation.lng, sunspots)
+      setNearestSpots(spots)
+    }
+  }, [userLocation])
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -296,13 +362,34 @@ export default function ExplorePage() {
                 <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY || ""}>
                   <GoogleMap
                     mapContainerStyle={mapContainerStyle}
-                    center={center}
+                    center={userLocation || center}
                     zoom={12}
                   >
-                    {sortedSunspots.map((spot) => (
+                    {userLocation && (
                       <Marker
-                        key={spot.id}
-                        position={spot.coordinates}
+                        position={userLocation}
+                        icon={{
+                          path: google.maps.SymbolPath.CIRCLE,
+                          scale: 8,
+                          fillColor: '#4285F4',
+                          fillOpacity: 1,
+                          strokeColor: '#ffffff',
+                          strokeWeight: 2,
+                        }}
+                      />
+                    )}
+                    {nearestSpots.map((spot) => (
+                      <Marker
+                        key={spot.name}
+                        position={{ lat: spot.lat, lng: spot.lng }}
+                        icon={{
+                          path: google.maps.SymbolPath.CIRCLE,
+                          scale: 8,
+                          fillColor: '#FFA500',
+                          fillOpacity: 1,
+                          strokeColor: '#ffffff',
+                          strokeWeight: 2,
+                        }}
                       />
                     ))}
                   </GoogleMap>
@@ -337,6 +424,58 @@ export default function ExplorePage() {
             <FadeIn delay={0.4}>
               <LocationList />
             </FadeIn>
+
+            {/* Location Permission Section */}
+            {!userLocation && (
+              <FadeIn delay={0.5}>
+                <Card className="p-6 bg-card/80 backdrop-blur shadow-lg">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <MapPin className="w-12 h-12 text-primary" />
+                    <h2 className="text-2xl font-semibold">Find Sunspots Near You</h2>
+                    <p className="text-muted-foreground">
+                      Allow location access to discover the best sunspots in your area
+                    </p>
+                    <Button
+                      onClick={requestLocation}
+                      disabled={isLocationLoading}
+                      className="mt-2"
+                    >
+                      {isLocationLoading ? (
+                        <div className="flex items-center">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Getting Location...
+                        </div>
+                      ) : (
+                        'Enable Location'
+                      )}
+                    </Button>
+                    {locationError && (
+                      <p className="text-red-500 text-sm mt-2">{locationError}</p>
+                    )}
+                  </div>
+                </Card>
+              </FadeIn>
+            )}
+
+            {/* Nearest Spots Section */}
+            {userLocation && nearestSpots.length > 0 && (
+              <FadeIn delay={0.6}>
+                <Card className="p-6 bg-card/80 backdrop-blur shadow-lg">
+                  <h2 className="text-xl font-semibold mb-4">Nearest Sunspots</h2>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {nearestSpots.map((spot) => (
+                      <Card key={spot.name} className="p-4 hover:shadow-md transition-shadow bg-background/50">
+                        <h3 className="font-medium">{spot.name}</h3>
+                        <div className="mt-2 space-y-1 text-sm text-muted-foreground">
+                          <p>Sun Score: {spot.sunScore}</p>
+                          <p>Distance: {spot.distanceInKm.toFixed(1)} km</p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </Card>
+              </FadeIn>
+            )}
           </div>
         </div>
       </section>

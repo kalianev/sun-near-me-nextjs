@@ -20,6 +20,7 @@ const LocationCard: React.FC<LocationCardProps> = ({ location, index = 0, isComp
 
   const handleViewDetails = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
+    localStorage.setItem('selectedLocation', JSON.stringify(location));
     router.push(`/place/${location.id}`);
   };
 

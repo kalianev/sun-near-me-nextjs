@@ -1,14 +1,17 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
+import { useSearchParams } from "next/navigation"
 
 import { FadeIn } from "@/components/fade-in"
 import { AnimatedBackground } from "@/components/sun-background"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AnimatedText } from "@/components/animated-text"
+import { SpotifyService } from "@/lib/spotify-api"
+import { SpotifyEmbed } from "@/components/spotify-embed"
 import Footer from '@/components/footer'
 
 const questions = [
@@ -43,6 +46,32 @@ export default function PlaylistSurvey() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [isComplete, setIsComplete] = useState(false)
+  const [isGenerating, setIsGenerating] = useState(false)
+  const [generatedPlaylist, setGeneratedPlaylist] = useState<{ id: string; url: string } | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Check for authentication error in URL
+    const authError = searchParams.get('error')
+    if (authError) {
+      setError('Authentication failed. Please try again.')
+    }
+
+    // Check if we have an access token
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/check')
+        const data = await response.json()
+        setIsAuthenticated(data.isAuthenticated)
+      } catch (err) {
+        console.error('Error checking authentication:', err)
+      }
+    }
+
+    checkAuth()
+  }, [searchParams])
 
   const handleAnswer = (answer: string) => {
     setAnswers((prev) => ({
@@ -57,49 +86,48 @@ export default function PlaylistSurvey() {
     }
   }
 
-  const handleGeneratePlaylist = () => {
-    // TODO: Implement playlist generation logic
-    console.log("Generating playlist with answers:", answers)
+  const handleAuthenticate = () => {
+    const authUrl = SpotifyService.getAuthUrl()
+    window.location.href = authUrl
+  }
+
+  const handleGeneratePlaylist = async () => {
+    setIsGenerating(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/spotify/generate-playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          timeOfDay: answers.timeOfDay,
+          mood: answers.mood,
+          environment: answers.environment,
+          musicType: answers.musicType,
+          goal: answers.goal,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to generate playlist')
+      }
+
+      const playlist = await response.json()
+      setGeneratedPlaylist(playlist)
+    } catch (err) {
+      console.error('Error generating playlist:', err)
+      setError('Failed to generate playlist. Please try again.')
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
     <main className="relative min-h-screen overflow-hidden">
       <AnimatedBackground />
-
-      {/* Header */}
-      <header className="container flex items-center justify-between py-6">
-        <div className="flex items-center gap-2">
-          <motion.div
-            className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-          />
-          <span className="text-xl font-medium tracking-tight">Sun Near Me</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-sm hover:text-primary transition-colors">
-            Home
-          </Link>
-          <Link href="/blog" className="text-sm hover:text-primary transition-colors">
-            Journal
-          </Link>
-          <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
-            Playlists
-          </Link>
-          <Link href="/trips" className="text-sm hover:text-primary transition-colors">
-            Trip Planner
-          </Link>
-          <ThemeToggle />
-        </nav>
-        <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggle />
-          <motion.button className="text-foreground" whileTap={{ scale: 0.9 }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </motion.button>
-        </div>
-      </header>
 
       {/* Back Button */}
       <div className="container mt-8">
@@ -155,18 +183,68 @@ export default function PlaylistSurvey() {
         ) : (
           <FadeIn delay={0.2}>
             <div className="mt-12 text-center">
-              <h2 className="text-2xl font-semibold">Ready to Generate Your Playlist?</h2>
-              <p className="mt-4 text-muted-foreground">
-                Based on your preferences, we'll create a custom playlist that matches your current vibe.
-              </p>
-              <motion.button
-                className="mt-8 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleGeneratePlaylist}
-              >
-                Generate Playlist
-              </motion.button>
+              {!isAuthenticated ? (
+                <>
+                  <h2 className="text-2xl font-semibold">Connect with Spotify</h2>
+                  <p className="mt-4 text-muted-foreground">
+                    To create your personalized playlist, we need to connect to your Spotify account.
+                  </p>
+                  <motion.button
+                    className="mt-8 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleAuthenticate}
+                  >
+                    Connect Spotify
+                  </motion.button>
+                </>
+              ) : !generatedPlaylist ? (
+                <>
+                  <h2 className="text-2xl font-semibold">Ready to Generate Your Playlist?</h2>
+                  <p className="mt-4 text-muted-foreground">
+                    Based on your preferences, we'll create a custom playlist that matches your current vibe.
+                  </p>
+                  <motion.button
+                    className="mt-8 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground disabled:opacity-50"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleGeneratePlaylist}
+                    disabled={isGenerating}
+                  >
+                    {isGenerating ? 'Generating...' : 'Generate Playlist'}
+                  </motion.button>
+                  {error && (
+                    <p className="mt-4 text-sm text-red-500">{error}</p>
+                  )}
+                </>
+              ) : (
+                <div className="mt-8">
+                  <h2 className="text-2xl font-semibold">Your Playlist is Ready!</h2>
+                  <p className="mt-4 text-muted-foreground">
+                    Enjoy your personalized sun playlist, curated just for you.
+                  </p>
+                  <div className="mt-8">
+                    <SpotifyEmbed
+                      url={generatedPlaylist.url}
+                      width="100%"
+                      height="352"
+                    />
+                  </div>
+                  <motion.button
+                    className="mt-8 rounded-full bg-primary px-8 py-3 font-medium text-primary-foreground"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setGeneratedPlaylist(null)
+                      setAnswers({})
+                      setCurrentQuestion(0)
+                      setIsComplete(false)
+                    }}
+                  >
+                    Create Another Playlist
+                  </motion.button>
+                </div>
+              )}
             </div>
           </FadeIn>
         )}

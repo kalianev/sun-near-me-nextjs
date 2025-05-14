@@ -16,6 +16,7 @@ import { HeroAnimation } from "@/components/hero-animation"
 import { DayNightAnimation } from "@/components/day-night-animation"
 import { Navigation } from "@/components/navigation"
 import Footer from '@/components/footer'
+import PhotoCycle from '@/components/photo-cycle'
 
 export default function Home() {
   return (
@@ -135,7 +136,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-medium">AI-Powered Insights</h3>
               <p className="mt-2 text-muted-foreground">
-                Speak naturally to our AI and get personalized recommendations without sifting through Reddit threads.
+                Speak naturally to our AI and get personalized recommendations for your journey.
               </p>
             </motion.div>
           </FadeIn>
@@ -199,27 +200,26 @@ export default function Home() {
                 <div className="aspect-video w-full relative overflow-hidden rounded-xl">
                   <Image
                     src="https://images.unsplash.com/photo-1518005068251-37900150dfca?q=80&w=800"
-                    alt="Sun Journal"
+                    alt="Solore"
                     fill
                     className="object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                     <div className="text-white">
-                      <h3 className="text-xl font-medium">Sun Journal</h3>
+                      <h3 className="text-xl font-medium">Solore Stories</h3>
                       <p className="mt-2 text-white/70">
-                        Explore articles about heliocentric art, architecture, and agricultural traditions.
+                        Stories that orbit the sun. Where sunlight meets story.
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-medium">Sun Journal</h3>
+                  <h3 className="text-xl font-medium">Solore Stories</h3>
                   <p className="mt-2 text-muted-foreground">
-                    Explore articles about heliocentric art, architecture, and agricultural traditions from around the
-                    world.
+                    Solar memory, cultural light. Where Solar meets Lore—our collection of sun-soaked stories and wisdom illuminating places, people, and presence through our helio-media.
                   </p>
                   <div className="mt-4 flex items-center text-primary">
-                    <span className="text-sm font-medium">Explore the journal</span>
+                    <span className="text-sm font-medium">Explore Solore</span>
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </div>
                 </div>
@@ -264,6 +264,11 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
+
+      {/* Photo Cycle Section */}
+      <div className="w-full">
+        <PhotoCycle />
+      </div>
 
       {/* CTA Section */}
       <section className="container my-24 md:my-40">

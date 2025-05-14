@@ -32,7 +32,18 @@ const PlaceDetailsPage = () => {
 
   useEffect(() => {
     if (params?.id) {
-      // Try to find in store first, fallback to mock data
+      // First check localStorage for the selected location
+      const storedLocation = localStorage.getItem('selectedLocation');
+      if (storedLocation) {
+        const parsedLocation = JSON.parse(storedLocation);
+        if (parsedLocation.id === params.id) {
+          setSelectedLocation(parsedLocation);
+          setLoading(false);
+          return;
+        }
+      }
+      
+      // If not in localStorage, try to find in store or mock data
       const found = locations.find((loc) => loc.id === params.id) || mockLocations.find((loc) => loc.id === params.id);
       setSelectedLocation(found || null);
       setLoading(false);
@@ -105,7 +116,7 @@ const PlaceDetailsPage = () => {
                   {selectedLocation.address}
                 </div>
               </div>
-              <SunScoreBadge score={selectedLocation.sunScore} size="lg" showLabel />
+              <SunScoreBadge score={selectedLocation.sunScore} size="lg" />
             </div>
 
             <p className="text-slate-600 dark:text-slate-300 mb-6">

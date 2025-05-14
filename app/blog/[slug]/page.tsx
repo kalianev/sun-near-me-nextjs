@@ -5,12 +5,15 @@ import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
 import { useParams } from "next/navigation"
 import { motion } from "framer-motion"
+import ReactMarkdown from 'react-markdown'
 
 import { FadeIn } from "@/components/fade-in"
 import { AnimatedBackground } from "@/components/sun-background"
 import { blogPosts } from "@/lib/blog-data"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { AnimatedText } from "@/components/animated-text"
+import { BlogVisualization } from "@/components/blog-visualization"
+import { Navigation } from "@/components/navigation"
 import Footer from '@/components/footer'
 
 export default function BlogPost() {
@@ -29,48 +32,13 @@ export default function BlogPost() {
     <main className="relative min-h-screen overflow-hidden">
       <AnimatedBackground />
 
-      {/* Header */}
-      <header className="container flex items-center justify-between py-6">
-        <div className="flex items-center gap-2">
-          <motion.div
-            className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-          />
-          <span className="text-xl font-medium tracking-tight">Sun Near Me</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-sm hover:text-primary transition-colors">
-            Home
-          </Link>
-          <Link href="/blog" className="text-sm hover:text-primary transition-colors">
-            Journal
-          </Link>
-          <Link href="/playlists" className="text-sm hover:text-primary transition-colors">
-            Playlists
-          </Link>
-          <Link href="/trips" className="text-sm hover:text-primary transition-colors">
-            Trip Planner
-          </Link>
-          <ThemeToggle />
-        </nav>
-        <div className="flex items-center gap-4 md:hidden">
-          <ThemeToggle />
-          <motion.button className="text-foreground" whileTap={{ scale: 0.9 }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </motion.button>
-        </div>
-      </header>
-
       {/* Back Button */}
       <div className="container mt-8">
         <Link href="/blog" className="inline-flex items-center text-muted-foreground hover:text-foreground">
           <motion.div whileHover={{ x: -3 }} whileTap={{ x: -6 }}>
             <ArrowLeft className="mr-2 h-4 w-4" />
           </motion.div>
-          <span>Back to journal</span>
+          <span>Back to Solore</span>
         </Link>
       </div>
 
@@ -132,9 +100,87 @@ export default function BlogPost() {
             <p className="lead">
               <AnimatedText text={post.excerpt} />
             </p>
-            <div className="whitespace-pre-line">
-              <AnimatedText text={post.content} />
+            <div className="mt-8">
+              <ReactMarkdown
+                components={{
+                  h1: ({node, ...props}) => (
+                    <motion.h1
+                      className="text-4xl font-bold text-primary mb-6"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <span {...props} />
+                    </motion.h1>
+                  ),
+                  h2: ({node, ...props}) => (
+                    <motion.h2
+                      className="text-3xl font-semibold text-accent mt-10 mb-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <span {...props} />
+                    </motion.h2>
+                  ),
+                  h3: ({node, ...props}) => (
+                    <motion.h3
+                      className="text-2xl font-semibold text-accent-foreground mt-8 mb-2"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <span {...props} />
+                    </motion.h3>
+                  ),
+                  a: ({node, ...props}) => (
+                    <a
+                      className="text-primary underline hover:text-accent transition-colors font-medium"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      {...props}
+                    />
+                  ),
+                  img: ({node, ...props}) => (
+                    <img
+                      className="rounded-xl shadow-lg my-6 mx-auto max-w-full h-auto"
+                      alt={props.alt || ''}
+                      {...props}
+                    />
+                  ),
+                  ul: ({node, ...props}) => (
+                    <ul className="list-disc pl-6 my-4 text-base" {...props} />
+                  ),
+                  ol: ({node, ...props}) => (
+                    <ol className="list-decimal pl-6 my-4 text-base" {...props} />
+                  ),
+                  li: ({node, ...props}) => (
+                    <li className="mb-2" {...props} />
+                  ),
+                  blockquote: ({node, ...props}) => (
+                    <blockquote className="border-l-4 border-accent pl-4 italic text-muted-foreground my-6" {...props} />
+                  ),
+                  code: ({node, ...props}) => (
+                    <code className="bg-muted px-1 py-0.5 rounded text-sm font-mono" {...props} />
+                  ),
+                  pre: ({node, ...props}) => (
+                    <pre className="bg-muted p-4 rounded my-4 overflow-x-auto" {...props} />
+                  ),
+                  p: ({node, ...props}) => (
+                    <p className="my-4 text-foreground" {...props} />
+                  ),
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
             </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.3}>
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold mb-6">Interactive Visualization</h2>
+            <BlogVisualization type={post.slug} />
           </div>
         </FadeIn>
       </article>
@@ -143,7 +189,7 @@ export default function BlogPost() {
       <section className="container my-24">
         <FadeIn>
           <h2 className="text-2xl font-semibold tracking-tight">
-            <AnimatedText text="More from the Journal" type="letter" />
+            <AnimatedText text="More from Solore" type="letter" />
           </h2>
         </FadeIn>
         <div className="mt-8 grid gap-8 md:grid-cols-3">

@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { mockLocations } from './mock-data';
+import { mockLocations } from '@/lib/mock-data';
 
 export type LocationType = 'all' | 'outdoor' | 'indoor';
 
 export interface Location {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   type: LocationType;
   coordinates: {
     lat: number;
@@ -15,6 +15,7 @@ export interface Location {
   imageUrl: string;
   sunScore: number;
   address?: string;
+  directionsUrl?: string;
   features?: string[];
   weatherInfo?: {
     temperature: number;
@@ -36,6 +37,7 @@ interface LocationStore {
   setViewMode: (mode: 'list' | 'map') => void;
   setLocationType: (type: LocationType) => void;
   setSortOrder: (order: 'score' | 'distance') => void;
+  addToComparison: (location: Location) => void;
 }
 
 export const useLocationStore = create<LocationStore>((set) => ({
@@ -49,4 +51,8 @@ export const useLocationStore = create<LocationStore>((set) => ({
   setViewMode: (viewMode) => set({ viewMode }),
   setLocationType: (locationType) => set({ locationType }),
   setSortOrder: (sortOrder) => set({ sortOrder }),
+  addToComparison: (location) => {
+    // Implementation will be added later
+    console.log('Adding to comparison:', location);
+  },
 })); 

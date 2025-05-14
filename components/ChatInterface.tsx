@@ -2,44 +2,37 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, ChevronRight, Bot, User, Sun, MapPin, Filter, SunMedium, Building, ArrowDownUp, List, MapIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChatStore } from '@/lib/chat-store';
-import { useLocationStore } from '@/lib/location-store';
+import { useLocationStore } from '@/store/locationStore';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import MapView from './map/MapView';
 import LocationList from './LocationList';
 
 const ChatInterface: React.FC = () => {
-  const { messages, addMessage, suggestedPrompts } = useChatStore();
+  const { messages, addMessage, suggestedPrompts, isLoading } = useChatStore();
   const { locations, viewMode, locationType, sortOrder, setViewMode, setLocationType, setSortOrder, setUserLocation } = useLocationStore();
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
-    addMessage({ role: 'user', content: inputValue });
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowResults(true);
-      // Set mock user location (Boston)
-      setUserLocation({ lat: 42.3601, lng: -71.0589 });
-    }, 1200);
+    if (!inputValue.trim() || isLoading) return;
+    
+    await addMessage({ role: 'user', content: inputValue });
     setInputValue('');
+    setShowResults(true);
   };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  const handlePromptClick = (prompt: string) => {
+  const handlePromptClick = async (prompt: string) => {
+    if (isLoading) return;
     setInputValue(prompt);
-    setTimeout(() => {
-      const form = document.getElementById('chat-form') as HTMLFormElement;
-      if (form) form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-    }, 100);
+    const form = document.getElementById('chat-form') as HTMLFormElement;
+    if (form) form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
   };
 
   // Filter and sort locations
@@ -50,7 +43,7 @@ const ChatInterface: React.FC = () => {
     if (sortOrder === 'score') {
       return b.sunScore - a.sunScore;
     }
-    return 0; // For demo, we'll just use the original order for distance
+    return 0;
   });
 
   return (

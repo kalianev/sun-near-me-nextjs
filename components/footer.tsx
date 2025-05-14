@@ -67,7 +67,7 @@ const Footer = () => {
             </li>
             <li>
               <Link href="/blog" className="text-sm text-muted-foreground hover:text-foreground">
-                Sun Journal
+                Solore
               </Link>
             </li>
             <li>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useLocationStore, Location } from '../lib/location-store';
+import { useLocationStore, Location } from '@/store/locationStore';
 import LocationCard from './LocationCard';
 
 const LocationList: React.FC = () => {
@@ -36,7 +36,17 @@ const LocationList: React.FC = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {filteredLocations.map((location: Location, index: number) => (
-        <LocationCard key={location.id} location={location} index={index} />
+        <motion.div
+          key={location.id}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+        >
+          <LocationCard 
+            location={location as any}
+            index={index} 
+          />
+        </motion.div>
       ))}
     </div>
   );

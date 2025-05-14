@@ -1,4 +1,4 @@
-import Suntry from '../components/Suntry';
+import Suntry from '@/components/app/Suntry';
 import Footer from '@/components/footer';
 import { AnimatedBackground } from "@/components/sun-background";
 

@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { X } from "lucide-react"
+// import { LoginButton } from './LoginButton'
 
 export function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -16,7 +17,8 @@ export function NavBar() {
     { href: "/trips", label: "Trip Planner" },
     { href: "/compare", label: "Compare" },
     { href: "/playlists", label: "Playlists" },
-    { href: "/blog", label: "Journal" },
+    { href: "/blog", label: "Solore" },
+    { href: "/circadian-test", label: "Circadian Test" },
   ]
 
   return (
@@ -39,6 +41,7 @@ export function NavBar() {
             </Link>
           ))}
           <ThemeToggle />
+          {/* <LoginButton /> */}
         </nav>
         <div className="flex items-center gap-4 md:hidden">
           <ThemeToggle />
@@ -73,6 +76,7 @@ export function NavBar() {
                 {item.label}
               </Link>
             ))}
+            {/* <LoginButton /> */}
           </nav>
         </div>
       )}

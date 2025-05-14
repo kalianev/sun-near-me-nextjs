@@ -27,14 +27,14 @@ export function AnimatedBackground() {
     window.addEventListener("resize", setCanvasDimensions)
 
     class Particle {
-      x: number
-      y: number
-      size: number
-      speedX: number
-      speedY: number
-      color: string
-
+      x: number | undefined
+      y: number | undefined
+      size: number | undefined
+      speedX: number | undefined
+      speedY: number | undefined
+      color: string | undefined
       constructor(isSunMode: boolean) {
+        if (!canvas) return
         this.x = Math.random() * canvas.width
         this.y = Math.random() * canvas.height
         this.size = Math.random() * 3 + 0.5
@@ -55,19 +55,22 @@ export function AnimatedBackground() {
           this.color = `hsla(${hue}, ${saturation}%, ${lightness}%, ${Math.random() * 0.5 + 0.2})`
         }
       }
-
       update() {
+        if (this.x === undefined || this.y === undefined || 
+            this.speedX === undefined || this.speedY === undefined) return
+            
         this.x += this.speedX
         this.y += this.speedY
 
         // Wrap around edges
-        if (this.x < 0) this.x = canvas.width
-        if (this.x > canvas.width) this.x = 0
-        if (this.y < 0) this.y = canvas.height
-        if (this.y > canvas.height) this.y = 0
+        if (this.x < 0) this.x = canvas!.width
+        if (this.x > canvas!.width) this.x = 0
+        if (this.y < 0) this.y = canvas!.height
+        if (this.y > canvas!.height) this.y = 0
       }
-
       draw() {
+        if (!ctx || this.color === undefined || this.x === undefined || 
+            this.y === undefined || this.size === undefined) return
         ctx.fillStyle = this.color
         ctx.beginPath()
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
